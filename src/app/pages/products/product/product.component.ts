@@ -14,4 +14,5 @@ export class ProductComponent {
   onClick():void {
     this.addToCartClick.emit(this.product)
   }
+  
 }
