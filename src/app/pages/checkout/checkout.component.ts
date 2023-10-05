@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/shared/services/data.service';
+import { tap } from 'rxjs';
+import { Store } from 'src/app/shared/interfaces/store.interface';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-checkout',
@@ -13,25 +17,33 @@ export class CheckoutComponent {
     city: '',
   }
 
-  onPickupOrDelivery(value: boolean) {
-    console.log(value);
-    
+
+  isDelivery: boolean = false
+  stores: Store[] = []
+
+  constructor(private dataService: DataService){}
+  onSubmit({value: formData}: NgForm):void{
+    const data = {
+      ...formData,
+      date: this.getCurrencyDay(),
+      pickup: this.isDelivery
+    }
+    this.dataService.saveOrder(formData).pipe(tap(res=> console.log(res))).subscribe()
+  }
+  ngOnInit():void{
+    this.getStores()
+  }
+  onPickupOrDelivery(value: boolean): void {
+    this.isDelivery = value
+  }
+  private getStores(): void {
+    this.dataService.getStores()
+    .pipe(tap((stores:Store[]) => this.stores = stores 
+    ))
+    .subscribe()
   }
 
-  stores =  [
-    {
-      "id": 1,
-      "name": "Park Row at Beekman St",
-      "address": "38 Park Row",
-      "city": "New York",
-      "openingHours": "10:00 - 14:00 and 17:00 - 20:30"
-    },
-    {
-      "id": 2,
-      "name": "Store Alcalá",
-      "address": "Calle de Alcalá, 21",
-      "city": "Madrid",
-      "openingHours": "10:00 - 14:00 and 17:00 - 20:30"
-    }
-  ]
+  private getCurrencyDay(): string {
+    return new Date().toLocaleDateString()
+  }
 }
