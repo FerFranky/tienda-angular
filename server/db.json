@@ -65,7 +65,7 @@
       "price": 5,
       "description": "En Hackeando del cerebro de tus compradores, Corti nos revela cómo muchas compañías crean productos digitales o procesos de venta capaces de conectar con la psicología del comprador.",
       "categoryId": 1,
-      "stock": 10
+      "stock": 8
     },
     {
       "id": 3,
@@ -272,6 +272,14 @@
       "date": "5/10/2023",
       "isDelivery": false,
       "id": 17
+    },
+    {
+      "name": "asdsa",
+      "shippingAddress": "SAasA",
+      "city": "asAS",
+      "date": "5/10/2023",
+      "isDelivery": true,
+      "id": 18
     }
   ],
   "detailsOrders": [
@@ -509,6 +517,17 @@
       ],
       "orderId": 17,
       "id": 17
+    },
+    {
+      "details": [
+        {
+          "productId": 2,
+          "productName": "Hackeando el cerebro de tus compradores: PsychoGrowth",
+          "quantity": 2
+        }
+      ],
+      "orderId": 18,
+      "id": 18
     }
   ]
 }

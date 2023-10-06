@@ -7,6 +7,7 @@ import { Details } from 'src/app/shared/interfaces/order.interface';
 import { Product } from '../products/product/interfaces/product.interface';
 import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
 import { Router } from '@angular/router';
+import { ProductsService } from '../products/services/product.service';
 
 @Component({
   selector: 'app-checkout',
@@ -28,7 +29,8 @@ export class CheckoutComponent {
   constructor(
     private dataService: DataService,
     private shoppingCartService: ShoppingCartService,
-    private router:Router
+    private router:Router,
+    private productService: ProductsService
   ) {}
   onSubmit({ value: formData }: NgForm): void {
     const data = {
@@ -75,6 +77,10 @@ export class CheckoutComponent {
     const details: Details[] = [];
     this.cart.forEach((product: Product )=> {
       const {id: productId, name: productName, quantity, stock} = product
+      const updateStock = stock - quantity
+      this.productService.updateStock(productId, updateStock).pipe(
+        tap(() => details.push({productId, productName, quantity}))
+      ).subscribe()
       details.push({productId, productName, quantity})
     })
     return details
