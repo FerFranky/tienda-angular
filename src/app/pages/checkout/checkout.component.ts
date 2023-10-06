@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/shared/services/data.service';
-import { delay, switchMap, tap } from 'rxjs';
+import { Subscription, delay, switchMap, tap } from 'rxjs';
 import { Store } from 'src/app/shared/interfaces/store.interface';
 import { NgForm } from '@angular/forms';
 import { Details } from 'src/app/shared/interfaces/order.interface';
@@ -15,6 +15,7 @@ import { ProductsService } from '../products/services/product.service';
   styleUrls: ['./checkout.component.scss'],
 })
 export class CheckoutComponent {
+  private cartSubscription: Subscription  | undefined;
   model = {
     name: '',
     store: '',
@@ -31,7 +32,9 @@ export class CheckoutComponent {
     private shoppingCartService: ShoppingCartService,
     private router:Router,
     private productService: ProductsService
-  ) {}
+  ) {
+    this.checkIfCartIsEmpty()
+  }
   onSubmit({ value: formData }: NgForm): void {
     const data = {
       ...formData,
@@ -47,7 +50,7 @@ export class CheckoutComponent {
           return this.dataService.saveDetailsOrder({ details, orderId });
         }),
         tap(() => this.router.navigate(['/checkout/thank-you'])),
-        delay(500),
+        delay(2000),
         tap(() => this.shoppingCartService.resetCart())
       )
       .subscribe();
@@ -57,6 +60,11 @@ export class CheckoutComponent {
     this.getDataCart()
     this.prepareDetails()
   }
+  ngOnDestroy(): void {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
+  } 
   onPickupOrDelivery(value: boolean): void {
     console.log(value);
     
@@ -90,5 +98,17 @@ export class CheckoutComponent {
     this.shoppingCartService.cartAction$
       .pipe(tap((products: Product[]) => (this.cart = products)))
       .subscribe();
+  }
+
+  private checkIfCartIsEmpty(): void {
+    this.cartSubscription = this.shoppingCartService.cartAction$
+      .pipe(
+        tap((products: Product[]) => {
+          if (Array.isArray(products) && !products.length) {
+            this.router.navigate(['/products']);
+          }
+        })
+      )
+      .subscribe()
   }
 }
