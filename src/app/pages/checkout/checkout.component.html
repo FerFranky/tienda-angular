@@ -1,5 +1,9 @@
 <div class="container">
-  <form class="form item" (ngSubmit)="onSubmit(checkoutForm)" #checkoutForm="ngForm">
+  <form
+    class="form item"
+    (ngSubmit)="onSubmit(checkoutForm)"
+    #checkoutForm="ngForm"
+  >
     <mat-form-field class="form__element">
       <mat-label>Name</mat-label>
       <input
@@ -17,14 +21,14 @@
     </mat-form-field>
 
     <mat-radio-group>
-      <mat-radio-button
-        value="pickup"
-        checked="true"
-        (change)="onPickupOrDelivery(false)"
-      >
+      <mat-radio-button value="isPickup" (change)="onPickupOrDelivery(false)">
         Pickup
       </mat-radio-button>
-      <mat-radio-button value="delivery" (change)="onPickupOrDelivery(true)">
+      <mat-radio-button
+        value="isDelivery"
+        checked="true"
+        (change)="onPickupOrDelivery(true)"
+      >
         Delivery
       </mat-radio-button>
     </mat-radio-group>

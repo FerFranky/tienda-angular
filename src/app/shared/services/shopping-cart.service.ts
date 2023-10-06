@@ -29,6 +29,12 @@ export class ShoppingCartService {
         this.calcTotal()
     }
 
+    resetCart(): void {
+        this.cartSubject.next([])
+        this.totalSubject.next(0)
+        this.quantitySubject.next(0)
+    }
+
     private calcTotal(): void {
         const total = this.products.reduce((acc, prod) => acc += (prod.price  * prod.quantity), 0)
         this.totalSubject.next(total)

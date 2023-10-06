@@ -13,6 +13,6 @@ export interface Order {
 }
 
 export interface DetailsOrder {
-    detaild: Details[];
-    OrderId: number;
+    details: Details[];
+    orderId: number;
   }
